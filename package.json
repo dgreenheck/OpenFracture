@@ -13,8 +13,9 @@
      "name": "Dan Greenheck",
      "email": "dgreenheck@gmail.com",
      "url": "https://www.unity3d.com"
-   }
+   },
    "dependencies": {
-     "com.dgreenheck.openfracture": "https://github.com/dgreenheck/OpenFracture.git"
+     "com.unity.test-framework": "1.1.30",
+     "com.unity.testtools.codecoverage": "1.0.1"
    }
 }
