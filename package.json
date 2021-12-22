@@ -17,5 +17,12 @@
    "dependencies": {
      "com.unity.test-framework": "1.1.30",
      "com.unity.testtools.codecoverage": "1.0.1"
-   }
+   },
+   "samples": [
+        {
+            "displayName": "Fracture",
+            "description": "Demo scene",
+            "path": "Samples~/Fracture"
+        }
+    ]
 }
