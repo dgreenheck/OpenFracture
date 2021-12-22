@@ -1,0 +1,20 @@
+{
+  "name": "com.dgreenheck.openfracture",
+  "version": "1.0.0",
+  "displayName": "OpenFracture",
+  "description": "Open source tool for slicing/fracturing meshes in Unity during runtime or in the editor.",
+  "unity": "2021.1",
+  "keywords": [
+    "mesh",
+    "slice",
+    "fracture"
+   ],
+   "author": {
+     "name": "Dan Greenheck",
+     "email": "dgreenheck@gmail.com",
+     "url": "https://www.unity3d.com"
+   }
+   "dependencies": {
+     "com.dgreenheck.openfracture": "https://github.com/dgreenheck/OpenFracture.git"
+   }
+}
