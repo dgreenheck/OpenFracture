@@ -11,6 +11,14 @@ OpenFracture can be imported using Unity’s built-in Package Manager. Follow th
 
 Alternatively, you may download the code directly and add it to your Unity project.
 
+## How to Use
+
+There are three separate components included in this package
+
+- `Fracture` - Runtime fracturing of meshes
+- `Prefracture` - Used for pre-fracturing meshes in the editor. The generated fragments can either be saved directly in the scene, or alternatively saved to disk if you would like to create a prefab.
+- `Slice` - Runtime slicing of meshes
+
 ## Features
 
 ### Fracturing
@@ -18,7 +26,7 @@ Alternatively, you may download the code directly and add it to your Unity proje
 - **Arbitary Mesh Geometry** - Support for convex and non-convex meshes as well as meshes with multiple holes. **Note: Meshes must be closed and cannot have self-intersecting geometry**
 - **2D/3D Fracturing** - Ability to specify which planes the mesh will be fractured in. This is useful when a mesh is effectively 2D (e.g. glass) and only needs to be fractured on two planes.
 - **UV Remapping** - Texture coordinates are preserved along edges where mesh is fractured/sliced.
-- **Custom Material** - Use custom material for inside faces. Supports textures with options for UV scaling & offset.
+- **Custom Inside Material** - Use custom material for inside faces. Supports textures with options for UV scaling & offset.
 - **Recursive Fracturing** - Fragments can be broken down into smaller fragments.
 - **Multiple Trigger Types** - Trigger fractures using triggers, collisions or pressing a key. Additonal trigger types can be added easily.
 - **Tunable Fragment Count** - Directly specify the number of fragments to easily tune performance for different platforms.
@@ -31,16 +39,8 @@ Alternatively, you may download the code directly and add it to your Unity proje
 - **Recursive Slicing** - Slice objects multiple times and slice the fragments into smaller pieces
 - **Detect Floating Fragments** - Detects if multiple, isolated fragments are created when slicing non-convex meshes and treats each fragment as a separate mesh.
 - **UV Remapping** - Texture coordinates are preserved along edges where mesh is fractured/sliced.
-- **Custom Material** - Use custom material for inside faces. Supports textures with options for UV scaling & offset.
-- **OnCompletion Callback** - Trigger any behavior after the fracturing is complete, such as playing an AudioSource or executing other in-game logic.
-
-## How to Use
-
-There are three separate components included in this package
-
-- `Fracture` - Runtime fracturing of meshes
-- `Prefracture` - Used for pre-fracturing meshes in the editor. The generated fragments can either be saved directly in the scene, or alternatively saved to disk if you would like to create a prefab.
-- `Slice` - Runtime slicing of meshes
+- **Custom Inside Material** - Use custom material for inside faces. Supports textures with options for UV scaling & offset.
+- **OnCompletion Callback** - Trigger any behavior after the slicing is complete, such as playing an AudioSource or executing other in-game logic.
 
 ## Unsupported Features / Limitations
 
