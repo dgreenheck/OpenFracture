@@ -15,6 +15,7 @@ public class Fracture : MonoBehaviour
     /// <summary>
     /// The number of times this fragment has been re-fractured.
     /// </summary>
+    [HideInInspector]
     public int currentRefractureCount = 0;
 
     /// <summary>

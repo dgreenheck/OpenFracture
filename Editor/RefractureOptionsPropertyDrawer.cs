@@ -5,7 +5,7 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(RefractureOptions))]
 public class RefractureOptionsPropertyDrawer : PropertyDrawer
 {   
-    private static bool foldout = false;
+    private static bool foldout = true;
 
     // Draw the property inside the given rect
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

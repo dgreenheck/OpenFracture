@@ -29,11 +29,11 @@ public class TriggerOptionsPropertyDrawer : PropertyDrawer
             {
                 case ((int)TriggerType.Collision):
                     EditorGUILayout.PropertyField(minimumCollisionForce);
-                    EditorGUILayout.PropertyField(filterCollisionsByTag);
+                    EditorGUILayout.PropertyField(filterCollisionsByTag, new GUIContent("Limit collisions to selected tags?"));
                     if (filterCollisionsByTag.boolValue)
                     {
                         EditorGUILayout.EndFoldoutHeaderGroup();
-                        EditorGUILayout.PropertyField(triggerAllowedTags);
+                        EditorGUILayout.PropertyField(triggerAllowedTags, new GUIContent("Included Tags"));
                     }
                     break;
                 case ((int)TriggerType.Trigger):
