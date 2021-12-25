@@ -12,7 +12,7 @@ public class RefractureOptions
     public bool enableRefracturing;
 
     [Tooltip("Maximum number of times a fragment can be re-fractured.")]
-    [Range(1, 10)]
+    [Range(1, 3)]
     public int maxRefractureCount;
 
     [Tooltip("Enable if refracturing should also invoke the callback functions.")]

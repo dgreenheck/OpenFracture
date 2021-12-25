@@ -9,6 +9,6 @@ PhysicMaterial:
   m_Name: Floor
   dynamicFriction: 1
   staticFriction: 1
-  bounciness: 0.5
+  bounciness: 0.8
   frictionCombine: 0
   bounceCombine: 0

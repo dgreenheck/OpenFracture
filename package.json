@@ -20,9 +20,9 @@
    },
    "samples": [
         {
-            "displayName": "Fracture",
-            "description": "Demo scene",
-            "path": "Samples~/Fracture"
+            "displayName": "FractureDemo",
+            "description": "Demo scene for the Fracture script",
+            "path": "Samples~/FractureDemo"
         }
     ]
 }
