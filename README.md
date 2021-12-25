@@ -1,4 +1,5 @@
 # OpenFracture
+
 OpenFracture is an open source Unity package for fracturing & slicing meshes. This package supports both convex and non-convex meshes as well as meshes with holes. This means any arbitrary geometry can be fractured/sliced (as long as the geometry is closed and non-intersecting).
 
 ## Installing
@@ -54,7 +55,11 @@ These features are currently **not supported**. They may be added in a future re
 - **Localized Fracturing** - Fracturing currently is performed uniformly without taking into consideration the point of impact.
 - **Slicing in Editor** - Currently slicing is only supported during runtime. The main reason for this is that slicing is extremely fast so this feature was not a top priority.
 
-## Algorithm Overview
+---
+
+# Appendices
+
+## Appendix A: Algorithm Overview
 
 ### Slicing
 
@@ -76,7 +81,15 @@ Now that the original mesh data has been divided in two and the geometry interse
 
 Fracturing is performed by recursively slicing a mesh until the target fragment count has been reached. For each slice, the origin of the geometry is calculated and used as the origin for the slice plane. The normal of the slice plane is randomly chosen.
 
-## References
+## Appendix B: Running the Unit Tests
+
+Many of the core functions have unit tests written. These can be helpful if you ever decide to start manipulating some of the core fracturing/slicing code. While the testing coverage isn't comprehensive, some tests are better than none!
+
+1. In the menu bar, go to _Window -> General -> Test Runner_
+2. On the _Test Runner_ window, click _Run All_ to run the suite of unit tests.
+3. Verify all tests execute successfully
+
+# References
 
 [1] Sloan, Scott W. "A fast algorithm for generating constrained Delaunay triangulations." Computers & Structures 47.3 (1993): 441-450.
 
