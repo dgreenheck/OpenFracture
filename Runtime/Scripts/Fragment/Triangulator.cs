@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Logic for triangulating a set of 3D points. Only supports convex polygons.
+/// </summary>
 public class Triangulator
 {
     // Constants for triangulation array indices
@@ -30,18 +33,20 @@ public class Triangulator
 
     // Points on the plane to triangulate
     public TriangulationPoint[] points;
+
+    // Array which tracks which triangles should be ignored in the final triangulation
     protected bool[] skipTriangle;
+
+    // Normal of the plane on which the points lie
     protected Vector3 normal;
 
     // Normalization scale factor
     public float normalizationScaleFactor = 1f;
 
     /// <summary>
-    /// Initializes a new constrained Delauney triangulation
+    /// Initializes the triangulator with the vertex data to be triangulated
     /// </summary>
     /// <param name="inputPoints">The points to triangulate</param>
-    /// <param name="constraints">The set of edge constraints to be included in the triangulation. Each tuple represents
-    /// a pair of vertices that are linked together (integers correspond to index in the `inputPoints` array)</param>
     /// <param name="normal">The normal of the triangulation plane</param>
     public Triangulator(List<MeshVertex> inputPoints, Vector3 normal)
     {
@@ -86,12 +91,10 @@ public class Triangulator
             return new int[] { };
         }
 
-        AddSuperTriangle();
-        NormalizeCoordinates();
-        var sortedPoints = SortPointsIntoBins();
-        ComputeTriangulation(ref sortedPoints);
-
-        SkipTrianglesWithSuperTriangleVertices();
+        this.AddSuperTriangle();
+        this.NormalizeCoordinates();
+        this.ComputeTriangulation();
+        this.DiscardTrianglesWithSuperTriangleVertices();
 
         List<int> triangles = new List<int>(3 * triangleCount);
         for (int i = 0; i < triangleCount; i++)
@@ -150,6 +153,7 @@ public class Triangulator
     /// <summary>
     /// Sorts the points into bins using an ordered grid
     /// </summary>
+    /// <returns>Returns the array of sorted points</returns>
     protected TriangulationPoint[] SortPointsIntoBins()
     {
         // Compute the number of bins along each axis
@@ -172,16 +176,17 @@ public class Triangulator
     }
 
     /// <summary>
-    /// Computes the triangulation of the point set. Returns true if the triangulation is
-    /// successful, otherwise returns false.
+    /// Computes the triangulation of the point set.
     /// </summary>
     /// <returns>Returns true if the triangulation was successful</returns>
-    protected bool ComputeTriangulation(ref TriangulationPoint[] sortedPoints)
+    protected bool ComputeTriangulation()
     {
         // Index of the current triangle being searched
         int tSearch = 0;
         // Index of the last triangle formed
         int tLast = 0;
+
+        var sortedPoints = SortPointsIntoBins();
 
         // Loop through each point and insert it into the triangulation
         for (int i = 0; i < N; i++)
@@ -467,9 +472,9 @@ public class Triangulator
     }
 
     /// <summary>
-    /// Marks any triangles that contain super-triangle vertices as skipped
+    /// Marks any triangles that contain super-triangle vertices as discarded
     /// </summary>
-    protected void SkipTrianglesWithSuperTriangleVertices()
+    protected void DiscardTrianglesWithSuperTriangleVertices()
     {
         for (int i = 0; i < triangleCount; i++)
         {
@@ -525,8 +530,9 @@ public class Triangulator
     /// <summary>
     /// Checks if the triangle `t` contains the specified vertex
     /// </summary>
-    /// <param name="t">The index of the triangle to test</param>
-    /// <returns>Returns true if the triangle `t` contains the a super trianlge vertex</returns>
+    /// <param name="t">The index of the triangle</param>
+    /// <param name="v">The index of the vertex</param>
+    /// <returns>Returns true if the triangle `t` contains the vertex `v`</returns>
     protected bool TriangleContainsVertex(int t, int v)
     {
         return triangulation[t, V1] == v || triangulation[t, V2] == v || triangulation[t, V3] == v;
@@ -559,7 +565,7 @@ public class Triangulator
     /// <param name="tOrigin">The origin triangle to search</param>
     /// <param name="tAdjacent">The triangle index to search for</param>
     /// <param name="edgeIndex">Edge index returned as an out parameter</param>
-    /// <returns>Returns true if `tOrigin` is adjaccent to `tAdjacent` and supplies the
+    /// <returns>True if `tOrigin` is adjacent to `tAdjacent` and supplies the
     /// shared edge index via the out parameter. If `tOrigin` is an invalid index or
     /// `tAdjacent` is not adjacent to `tOrigin`, returns false.</returns>
     protected bool FindSharedEdge(int tOrigin, int tAdjacent, out int edgeIndex)

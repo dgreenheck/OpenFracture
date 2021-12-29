@@ -1,19 +1,28 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
+/// <summary>
+/// Class which handles slicing a mesh into two pieces given the origin and normal of the slice plane.
+/// </summary>
 public static class MeshSlicer
 {
-    // Slices the mesh by the plane specified by `sliceNormal` and `sliceOrigin`
-    // The sliced mesh data is return via out parameters.
+    /// <summary>
+    /// Slices the mesh by the plane specified by `sliceNormal` and `sliceOrigin`
+    /// The sliced mesh data is return via out parameters.
+    /// </summary>
+    /// <param name="meshData"></param>
+    /// <param name="sliceNormal">The normal of the slice plane (points towards the top slice)</param>
+    /// <param name="sliceOrigin">The origin of the slice plane</param>
+    /// <param name="textureScale">Scale factor to apply to UV coordinates</param>
+    /// <param name="textureOffset">Offset to apply to UV coordinates</param>
+    /// <param name="topSlice">Out parameter returning fragment mesh data for slice above the plane</param>
+    /// <param name="bottomSlice">Out parameter returning fragment mesh data for slice below the plane</param>
     public static void Slice(FragmentData meshData,
-                      Vector3 sliceNormal,
-                      Vector3 sliceOrigin,
-                      Vector2 textureScale,
-                      Vector2 textureOffset,
-                      out FragmentData topSlice,
-                      out FragmentData bottomSlice)
+                             Vector3 sliceNormal,
+                             Vector3 sliceOrigin,
+                             Vector2 textureScale,
+                             Vector2 textureOffset,
+                             out FragmentData topSlice,
+                             out FragmentData bottomSlice)
     {
         topSlice = new FragmentData(meshData.vertexCount, meshData.triangleCount);
         bottomSlice = new FragmentData(meshData.vertexCount, meshData.triangleCount);
@@ -49,13 +58,20 @@ public static class MeshSlicer
         FillCutFaces(topSlice, bottomSlice, -sliceNormal, textureScale, textureOffset);
     }
 
-    // Fills the cut faces for each sliced mesh. The `sliceNormal` is the normal for the plane and points
-    // in the direction of `topMeshData`
+    /// <summary>
+    /// Fills the cut faces for each sliced mesh. The `sliceNormal` is the normal for the plane and points
+    /// in the direction of `topMeshData`
+    /// </summary>
+    /// <param name="topSlice">Fragment mesh data for slice above the slice plane</param>
+    /// <param name="bottomSlice">Fragment mesh data for slice above the slice plane</param>
+    /// <param name="sliceNormal">Normal of the slice plane (points towards the top slice)</param>
+    /// <param name="textureScale">Scale factor to apply to UV coordinates</param>
+    /// <param name="textureOffset">Offset to apply to UV coordinates</param>
     private static void FillCutFaces(FragmentData topSlice,
-                              FragmentData bottomSlice,
-                              Vector3 sliceNormal,
-                              Vector2 textureScale,
-                              Vector2 textureOffset)
+                                     FragmentData bottomSlice,
+                                     Vector3 sliceNormal,
+                                     Vector2 textureScale,
+                                     Vector2 textureOffset)
     {
         // Since the topSlice and bottomSlice both share the same cut face, we only need to calculate it
         // once. Then the same vertex/triangle data for the face will be used for both slices, except
@@ -116,13 +132,23 @@ public static class MeshSlicer
         }
     }
 
+    /// <summary>
+    /// Identifies triangles that are intersected by the slice plane and splits them in two
+    /// </summary>
+    /// <param name="meshData"></param>
+    /// <param name="topSlice">Fragment mesh data for slice above the slice plane</param>
+    /// <param name="bottomSlice">Fragment mesh data for slice above the slice plane</param>
+    /// <param name="sliceNormal">The normal of the slice plane (points towards the top slice)</param>
+    /// <param name="sliceOrigin">The origin of the slice plane</param>
+    /// <param name="side">Array mapping each vertex to either the top/bottom slice</param>
+    /// <param name="subMesh">Index of the sub mesh</param>
     private static void SplitTriangles(FragmentData meshData,
-                                FragmentData topSlice,
-                                FragmentData bottomSlice,
-                                Vector3 sliceNormal,
-                                Vector3 sliceOrigin,
-                                bool[] side,
-                                SlicedMeshSubmesh subMesh)
+                                       FragmentData topSlice,
+                                       FragmentData bottomSlice,
+                                       Vector3 sliceNormal,
+                                       Vector3 sliceOrigin,
+                                       bool[] side,
+                                       SlicedMeshSubmesh subMesh)
     {
         int[] triangles = meshData.GetTriangles((int)subMesh);
 
@@ -178,47 +204,59 @@ public static class MeshSlicer
         }
     }
 
-    // Takes the triangle defined by the points (v1,v2,v3) and splits it based on the
-    // provided intersection points.
-    // - `v1`, `v2`, `v3` are the indexes of the triangle relative to the original mesh data
-    // - `v1` and `v2` are on the the side of split plane that belongs to meshA
-    // - `v3` is on the side of the split plane that belongs to meshB
-    // - `vertices`, `normals`, `uv` are the original mesh data used for interpolation  
-    //      
-    // v3BelowCutPlane = true
-    // ======================
-    //                                
-    //     v1 *_____________* v2   .
-    //         \           /      /|\  cutNormal
-    //          \         /        |
-    //       ----*-------*---------*--
-    //        v13 \     /  v23       cutOrigin
-    //             \   /
-    //              \ /
-    //               *  v3         triangle normal out of screen                                                                                  
-    //    
-    // v3BelowCutPlane = false
-    // =======================
-    //
-    //               *  v3         .                                             
-    //              / \           /|\  cutNormal  
-    //         v23 /   \ v13       |                    
-    //       -----*-----*----------*--
-    //           /       \         cut origin                                
-    //          /         \                                                                  
-    //      v2 *___________* v1    triangle normal out of screen
-    //                                                    
+    /// <summary>
+    /// Splits triangle defined by the points (v1,v2,v3)
+    /// </summary>
+    /// <param name="v1_idx">Index of first vertex in triangle</param>
+    /// <param name="v2_idx">Index of second vertex in triangle<</param>
+    /// <param name="v3_idx">Index of third vertex in triangle<</param>
+    /// <param name="sliceNormal">The normal of the slice plane (points towards the top slice)</param>
+    /// <param name="sliceOrigin">The origin of the slice plane</param>
+    /// <param name="meshData">Original mesh data</param>
+    /// <param name="topSlice">Mesh data for top slice</param>
+    /// <param name="bottomSlice">Mesh data for bottom slice</param>
+    /// <param name="subMesh">Index of the submesh that the triangle belongs to</param>
+    /// <param name="v3BelowCutPlane">Boolean indicating whether v3 is above or below the slice plane.</param>                                             
     private static void SplitTriangle(int v1_idx,
-                               int v2_idx,
-                               int v3_idx,
-                               Vector3 sliceNormal,
-                               Vector3 sliceOrigin,
-                               FragmentData meshData,
-                               FragmentData topSlice,
-                               FragmentData bottomSlice,
-                               SlicedMeshSubmesh subMesh,
-                               bool v3BelowCutPlane)       
+                                      int v2_idx,
+                                      int v3_idx,
+                                      Vector3 sliceNormal,
+                                      Vector3 sliceOrigin,
+                                      FragmentData meshData,
+                                      FragmentData topSlice,
+                                      FragmentData bottomSlice,
+                                      SlicedMeshSubmesh subMesh,
+                                      bool v3BelowCutPlane)       
     {
+        // - `v1`, `v2`, `v3` are the indexes of the triangle relative to the original mesh data
+        // - `v1` and `v2` are on the the side of split plane that belongs to meshA
+        // - `v3` is on the side of the split plane that belongs to meshB
+        // - `vertices`, `normals`, `uv` are the original mesh data used for interpolation  
+        //      
+        // v3BelowCutPlane = true
+        // ======================
+        //                                
+        //     v1 *_____________* v2   .
+        //         \           /      /|\  cutNormal
+        //          \         /        |
+        //       ----*-------*---------*--
+        //        v13 \     /  v23       cutOrigin
+        //             \   /
+        //              \ /
+        //               *  v3         triangle normal out of screen                                                                                  
+        //    
+        // v3BelowCutPlane = false
+        // =======================
+        //
+        //               *  v3         .                                             
+        //              / \           /|\  cutNormal  
+        //         v23 /   \ v13       |                    
+        //       -----*-----*----------*--
+        //           /       \         cut origin                                
+        //          /         \                                                                  
+        //      v2 *___________* v1    triangle normal out of screen
+        //                 
+        
         float s13;
         float s23;
         Vector3 v13;

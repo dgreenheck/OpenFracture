@@ -13,45 +13,32 @@ public class CameraController : MonoBehaviour
     [Tooltip("Sensitivity of the mouse for pan / tilt.")]
     public float mouseSensitivity = 5.0f;
 
-    // True if mouse camera control is enabled
-    private bool mouseControlEnabled = true;
-
     private float startTime = 0f;
     private float elapsedTime = 0f;
 
     void Start()
     {
-        Cursor.visible = false;
         startTime = Time.time;
     }
 
     void Update()
     {    
-        // Right-click toggles mouse control
-        if (Input.GetMouseButtonDown(1))
+        float dx = Input.GetAxis("Mouse X")  * mouseSensitivity;
+        float dy = Input.GetAxis("Mouse Y")  * mouseSensitivity;
+
+        if (elapsedTime > 0.5f)
         {
-            mouseControlEnabled = !mouseControlEnabled;
+            this.transform.parent.Rotate(Vector3.up, dx);
+
+            // Clamp pitch to [-80, 80] degrees
+            var currentPitch = this.transform.eulerAngles.x;
+            if (currentPitch > 180f) currentPitch -= 360f;
+            var newPitch = Mathf.Clamp(currentPitch - dy, -80f, 80f);
+            this.transform.localEulerAngles = new Vector3(newPitch, 0, 0);
         }
-
-        if (mouseControlEnabled)
+        else
         {
-            float dx = Input.GetAxis("Mouse X")  * mouseSensitivity;
-            float dy = Input.GetAxis("Mouse Y")  * mouseSensitivity;
-
-            if (elapsedTime > 0.5f)
-            {
-                this.transform.parent.Rotate(Vector3.up, dx);
-
-                // Clamp pitch to [-80, 80] degrees
-                var currentPitch = this.transform.eulerAngles.x;
-                if (currentPitch > 180f) currentPitch -= 360f;
-                var newPitch = Mathf.Clamp(currentPitch - dy, -80f, 80f);
-                this.transform.localEulerAngles = new Vector3(newPitch, 0, 0);
-            }
-            else
-            {
-                elapsedTime = Time.time - startTime;
-            }
+            elapsedTime = Time.time - startTime;
         }
     }
 

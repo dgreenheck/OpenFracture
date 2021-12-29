@@ -1,39 +1,45 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConstrainedTriangulator : Triangulator
+/// <summary>
+/// Class for triangulating a set of 3D points with edge constraints. Supports convex and non-convex polygons
+/// as well as polygons with holes.
+/// </summary>
+public sealed class ConstrainedTriangulator : Triangulator
 {
     /// <summary>
     /// Given an edge E12, E23, E31, this returns the first vertex for that edge (V1, V2, V3, respectively)
     /// </summary>
     /// <value></value>
-    private int[] edgeVertex1 = new int[] { 0, 0, 0, V1, V2, V3 };
+    private static readonly int[] edgeVertex1 = new int[] { 0, 0, 0, V1, V2, V3 };
 
     /// <summary>
     /// Given an edge E12, E23, E31, this returns the second vertex for that edge (V2, V3, V1, respectively)
     /// </summary>
     /// <value></value>
-    private int[] edgeVertex2 = new int[] { 0, 0, 0, V2, V3, V1 };
+    private static readonly int[] edgeVertex2 = new int[] { 0, 0, 0, V2, V3, V1 };
 
     /// <summary>
     /// Given an edge E12, E23, E31, this returns the vertex opposite that edge (V3, V1, V2, respectively)
     /// </summary>
     /// <value></value>
-    private int[] oppositePoint = new int[] { 0, 0, 0, V3, V1, V2 };
+    private static readonly int[] oppositePoint = new int[] { 0, 0, 0, V3, V1, V2 };
 
     /// <summary>
     /// Given an edge E12, E23, E31, this returns the next clockwise edge (E23, E31, E12, respectively)
     /// </summary>
     /// <value></value>
-    private int[] nextEdge = new int[] { 0, 0, 0, E23, E31, E12 };
+    private static readonly int[] nextEdge = new int[] { 0, 0, 0, E23, E31, E12 };
 
     /// <summary>
     /// Given an edge E12, E23, E31, this returns the previous clockwise edge (E31, E12, E23, respectively)
     /// </summary>
     /// <value></value>
-    private int[] previousEdge = new int[] { 0, 0, 0, E31, E12, E23 };
+    private static readonly int[] previousEdge = new int[] { 0, 0, 0, E31, E12, E23 };
 
+    /// <summary>
+    /// List of edge constraints provided during initialization
+    /// </summary>
     private List<EdgeConstraint> constraints;
 
     /// <summary>
@@ -49,15 +55,23 @@ public class ConstrainedTriangulator : Triangulator
     /// </summary>
     private bool[] visited;
 
-    public ConstrainedTriangulator(List<MeshVertex> inputPoints, List<EdgeConstraint> constraints, Vector3 normal) : base(inputPoints, normal)
+    /// <summary>
+    /// Initializes the triangulator with the vertex data to be triangulated given a set of edge constraints
+    /// </summary>
+    /// <param name="inputPoints">The of points to triangulate.</param>
+    /// <param name="constraints">The list of edge constraints which defines how the vertices in `inputPoints` are connected.</param>
+    /// <param name="normal">The normal of the plane in which the `inputPoints` lie.</param>
+    /// <returns></returns>
+    public ConstrainedTriangulator(List<MeshVertex> inputPoints, List<EdgeConstraint> constraints, Vector3 normal)
+        : base(inputPoints, normal)
     {
         this.constraints = constraints;
     }
 
     /// <summary>
-    /// Performs the triangulation
+    /// Calculates the triangulation
     /// </summary>
-    /// <returns>Returns an array containing the indices of the triangles, mapped to the list of points passed in during initialization</returns>
+    /// <returns>Returns an array containing the indices of the triangles, mapped to the list of points passed in during initialization.</returns>
     public override int[] Triangulate()
     {
         // Need at least 3 vertices to triangulate
@@ -66,18 +80,17 @@ public class ConstrainedTriangulator : Triangulator
             return new int[] { };
         }
 
-        AddSuperTriangle();
-        NormalizeCoordinates();
-        var sortedPoints = SortPointsIntoBins();
-        ComputeTriangulation(ref sortedPoints);
+        this.AddSuperTriangle();
+        this.NormalizeCoordinates();
+        this.ComputeTriangulation();
 
         if (constraints.Count > 0)
         {
-            ApplyConstraints();
-            SkipTrianglesViolatingConstraints();
+            this.ApplyConstraints();
+            this.DiscardTrianglesViolatingConstraints();
         }
 
-        SkipTrianglesWithSuperTriangleVertices();
+        this.DiscardTrianglesWithSuperTriangleVertices();
 
         List<int> triangles = new List<int>(3 * triangleCount);
         for (int i = 0; i < triangleCount; i++)
@@ -119,7 +132,7 @@ public class ConstrainedTriangulator : Triangulator
             // For each intersecting edge, we identify the triangles that share that edge (which form a quad)
             // The diagonal of this quad is flipped.
             Queue<EdgeConstraint> intersectingEdges = FindIntersectingEdges(constraint, vertexTriangles);
-            RemoveIntersectingEdges(constraint, intersectingEdges, constraints);
+            RemoveIntersectingEdges(constraint, intersectingEdges);
         }
     }
 
@@ -285,7 +298,7 @@ public class ConstrainedTriangulator : Triangulator
     /// </summary>
     /// <param name="constraint">The constraint to check against</param>
     /// <param name="intersectingEdges">A queue containing the previously found edges that intersect the constraint</param>
-    internal void RemoveIntersectingEdges(EdgeConstraint constraint, Queue<EdgeConstraint> intersectingEdges, List<EdgeConstraint> constraints)
+    internal void RemoveIntersectingEdges(EdgeConstraint constraint, Queue<EdgeConstraint> intersectingEdges)
     {
         // Remove intersecting edges. Keep track of the new edges that we create
         List<EdgeConstraint> newEdges = new List<EdgeConstraint>();
@@ -347,7 +360,7 @@ public class ConstrainedTriangulator : Triangulator
         // of the triangulation while respecting the constraints
         if (newEdges.Count > 0)
         {
-            RestoreConstrainedDelauneyTriangulation(constraint, newEdges, constraints);
+            RestoreConstrainedDelauneyTriangulation(constraint, newEdges);
         }
     }
 
@@ -356,7 +369,7 @@ public class ConstrainedTriangulator : Triangulator
     /// </summary>
     /// <param name="constraint">The constraint that was added to the triangulation</param>
     /// <param name="newEdges">The list of new edges that were added</param>
-    internal void RestoreConstrainedDelauneyTriangulation(EdgeConstraint constraint, List<EdgeConstraint> newEdges, List<EdgeConstraint> constraints)
+    internal void RestoreConstrainedDelauneyTriangulation(EdgeConstraint constraint, List<EdgeConstraint> newEdges)
     {
         // Iterate over the list of newly created edges and swap non-constraint diagonals until no more swaps take place
         bool swapOccurred = true;
@@ -396,10 +409,9 @@ public class ConstrainedTriangulator : Triangulator
     }
 
     /// <summary>
-    /// Removes all of the triangles that violate the constraints
-    /// <param name="constraints">The list of constraints to check again</param>
+    /// Discards triangles that violate the any of the edge constraints
     /// </summary>
-    internal void SkipTrianglesViolatingConstraints()
+    internal void DiscardTrianglesViolatingConstraints()
     {
         // Initialize to all triangles being skipped
         for (int i = 0; i < triangleCount; i++)
@@ -498,15 +510,15 @@ public class ConstrainedTriangulator : Triangulator
     }
 
     /// <summary>
-    /// Returns true if the triangle constains the edge constraint
+    /// Determines if the triangle contains the edge constraint
     /// </summary>
     /// <param name="t">The triangle to test</param>
     /// <param name="constraint">The edge constraint</param>
-    /// <returns></returns>
+    /// <returns>True if the triangle contains one or both of the endpoints of the constraint</returns>
     internal bool TriangleContainsConstraint(int t, EdgeConstraint constraint)
     {
         return (triangulation[t, V1] == constraint.v1 || triangulation[t, V2] == constraint.v1 || triangulation[t, V3] == constraint.v1) &&
-            (triangulation[t, V1] == constraint.v2 || triangulation[t, V2] == constraint.v2 || triangulation[t, V3] == constraint.v2);
+               (triangulation[t, V1] == constraint.v2 || triangulation[t, V2] == constraint.v2 || triangulation[t, V3] == constraint.v2);
     }
 
     /// <summary>

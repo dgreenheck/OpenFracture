@@ -5,17 +5,34 @@ using UnityEngine.TestTools;
 /// </summary>
 public class EdgeConstraint
 {
-    // Index of the first vertex
+    /// <summary>
+    /// Index of the first end point of the constraint
+    /// </summary>
     public int v1;
-    // Index of the second vertx
+    
+    /// <summary>
+    /// Index of the second end point of the constraint
+    /// </summary>
     public int v2;
-    // Index of the triangle prior to the edge crossing (v1->v2)
+
+    /// <summary>
+    /// Index of the triangle prior to the edge crossing (v1 -> v2)
+    /// </summary>
     public int t1;
-    // Index of the triangle after the edge crossing (v1->v2)
+
+    /// <summary>
+    /// Index of the triangle after the edge crossing (v1 -> v2)
+    /// </summary>
     public int t2;
-    // Index of the edge on triangle1 side
+
+    /// <summary>
+    /// Index of the edge on the t1 side
+    /// </summary>
     public int t1Edge;
 
+    /// <summary>
+    /// Creates a new edge constraint with the given end points
+    /// </summary>
     public EdgeConstraint(int v1, int v2)
     {
         this.v1 = v1;
@@ -24,6 +41,9 @@ public class EdgeConstraint
         this.t2 = -1;
     }
 
+    /// <summary>
+    /// Creates a new edge constraint and defines triangles on either side of the edge
+    /// </summary>
     public EdgeConstraint(int v1, int v2, int triangle1, int triangle2, int edge1)
     {
         this.v1 = v1;
