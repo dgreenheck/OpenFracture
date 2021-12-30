@@ -1,6 +1,6 @@
 using UnityEditor;
 
-[CustomEditor(typeof(SliceEditor))]
+[CustomEditor(typeof(Slice))]
 [CanEditMultipleObjects]
 public class SliceEditor : Editor
 {

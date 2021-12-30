@@ -6,6 +6,26 @@ public class PlaneSlicer : MonoBehaviour
 {
     public float RotationSensitivity = 0.1f;
 
+    public void OnTriggerStay(Collider collider)
+    {
+        var material = collider.gameObject.GetComponent<MeshRenderer>().material;
+        if (material.name == "HighlightSlice")
+        {
+            material.SetVector("CutPlaneNormal", this.transform.up);
+            material.SetVector("CutPlaneOrigin", this.transform.position);
+        }
+    }
+
+    public void OnTriggerExit(Collider collider)
+    {
+        var material = collider.gameObject.GetComponent<MeshRenderer>().material;
+        if (material.name == "HighlightSlice")
+        {
+            material.SetVector("CutPlaneNormal", Vector3.zero);
+            material.SetVector("CutPlaneOrigin", Vector3.positiveInfinity);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -38,7 +58,6 @@ public class PlaneSlicer : MonoBehaviour
 
                 if (sliceObj != null)
                 {
-                    obj.GetComponent<HighlightSlice>()?.HideSliceLine();
                     sliceObj.ComputeSlice(this.transform.up, this.transform.position);
                 }
             }
