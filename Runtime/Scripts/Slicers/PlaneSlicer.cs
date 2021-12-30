@@ -4,12 +4,12 @@ using UnityEngine.TestTools;
 [ExcludeFromCoverage]
 public class PlaneSlicer : MonoBehaviour
 {
-    public float RotationSensitivity = 0.1f;
+    public float RotationSensitivity = 1f;
 
     public void OnTriggerStay(Collider collider)
     {
         var material = collider.gameObject.GetComponent<MeshRenderer>().material;
-        if (material.name == "HighlightSlice")
+        if (material.name.StartsWith("HighlightSlice"))
         {
             material.SetVector("CutPlaneNormal", this.transform.up);
             material.SetVector("CutPlaneOrigin", this.transform.position);
@@ -19,9 +19,8 @@ public class PlaneSlicer : MonoBehaviour
     public void OnTriggerExit(Collider collider)
     {
         var material = collider.gameObject.GetComponent<MeshRenderer>().material;
-        if (material.name == "HighlightSlice")
+        if (material.name.StartsWith("HighlightSlice"))
         {
-            material.SetVector("CutPlaneNormal", Vector3.zero);
             material.SetVector("CutPlaneOrigin", Vector3.positiveInfinity);
         }
     }
@@ -58,6 +57,7 @@ public class PlaneSlicer : MonoBehaviour
 
                 if (sliceObj != null)
                 {
+                    sliceObj.GetComponent<MeshRenderer>()?.material.SetVector("CutPlaneOrigin", Vector3.positiveInfinity);
                     sliceObj.ComputeSlice(this.transform.up, this.transform.position);
                 }
             }
