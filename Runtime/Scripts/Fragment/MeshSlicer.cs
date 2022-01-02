@@ -270,8 +270,8 @@ public static class MeshSlicer
             MathUtils.LinePlaneIntersection(v2.position, v3.position, sliceNormal, sliceOrigin, out v23, out s23))
         {
             // Interpolate normals and UV coordinates
-            var norm13 = v1.normal + s13 * (v3.normal - v1.normal);
-            var norm23 = v2.normal + s23 * (v3.normal - v2.normal);
+            var norm13 = (v1.normal + s13 * (v3.normal - v1.normal)).normalized;
+            var norm23 = (v2.normal + s23 * (v3.normal - v2.normal)).normalized;
             var uv13 = v1.uv + s13 * (v3.uv - v1.uv);
             var uv23 = v2.uv + s23 * (v3.uv - v2.uv);
 
