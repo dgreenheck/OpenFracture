@@ -14,6 +14,8 @@ Alternatively, you may download the code directly and add it to your Unity proje
 
 ## How to Use
 
+Start by reading the ~[preliminaries](/Documentation~/Prelimaries.md)
+
 There are three separate components included in this package
 
 - ![Fracture](/Documentation~/Fracture.md) - Runtime fracturing of meshes
