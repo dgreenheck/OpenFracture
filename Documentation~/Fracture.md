@@ -8,10 +8,10 @@ The `Fracture` script allows you to fracture meshes during runtime.
 
 An object should have the following components added to it. The first three are required components for the script (i.e. they are added automatically) while the Collider is not a required component since you are allowed to use any type of collider.
 
-* MeshFilter
-* MeshRenderer
-* RigidBody
-* Collider (any type)
+* `MeshFilter`
+* `MeshRenderer`
+* `RigidBody`
+* `Collider` (any type)
 
 ## Properties
 
