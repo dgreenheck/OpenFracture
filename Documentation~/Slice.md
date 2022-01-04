@@ -27,6 +27,20 @@ An object should have the following components added to it. The first three are 
 - **Texture Offset**: Constant offset applied to the UV coordinates for the sliced faces.
 - **Invoke Callbacks**: If enabled, slicing fragments will also trigger the callback functions. This option can be useful if you only want to trigger an action the first time an object is sliced but not when the fragments are resliced (in this case, you would set this option to false).
 
-
-## Callback Options
+### Callback Options
 - **OnCompleted()**: This callback is triggered when the slicing has been completed. Use this to play a sound, turn on a light or any other in-game logic you require.
+
+## How to Use
+
+### Call from Script
+Unlike `Fracture` and `Prefracture`, `Slice` requires scripting since you must pass in the normal and origin of the slice plane during runtime.
+
+If `obj` is the object to be sliced, execute the following code to slice `obj` into two fragments. `sliceNormal` and `sliceOrigin` are the normal and origin of the slice plane in world coordinates, respectively.
+
+```csharp
+var slicer = obj.GetComponent<Slice>();
+var sliceNormal = Vector3.up;
+var sliceOrigin = obj.transform.position; 
+
+slicer.ComputeSlice(sliceNormal, sliceOrigin);
+```
