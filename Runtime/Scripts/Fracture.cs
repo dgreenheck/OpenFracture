@@ -23,6 +23,26 @@ public class Fracture : MonoBehaviour
     /// </summary>
     private GameObject fragmentRoot;
 
+    [ContextMenu("Print Mesh Info")]
+    public void PrintMeshInfo()
+    {
+        var mesh = this.GetComponent<MeshFilter>().mesh;
+        Debug.Log("Positions");
+        
+        var positions = mesh.vertices;
+        var normals = mesh.normals;
+        var uvs = mesh.uv;
+
+        for (int i = 0; i < positions.Length; i++)
+        {
+            Debug.Log($"Vertex {i}");
+            Debug.Log($"POS | X: {positions[i].x} Y: {positions[i].y} Z: {positions[i].z}");
+            Debug.Log($"NRM | X: {normals[i].x} Y: {normals[i].y} Z: {normals[i].z} LEN: {normals[i].magnitude}");
+            Debug.Log($"UV  | U: {uvs[i].x} V: {uvs[i].y}");
+            Debug.Log("");
+        }
+    }
+
     void OnValidate()
     {
         if (this.transform.parent != null)
