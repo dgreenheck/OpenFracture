@@ -1,5 +1,7 @@
 # OpenFracture
 
+![OpenFracture GitHub Header](https://user-images.githubusercontent.com/3814912/148176407-a0c49ba0-c704-4b60-89a3-cea47175b6c2.gif)
+
 OpenFracture is an open source Unity package for fracturing & slicing meshes. This package supports both convex and non-convex meshes as well as meshes with holes. This means any arbitrary geometry can be fractured/sliced (as long as the geometry is closed and non-intersecting).
 
 ## Installing
