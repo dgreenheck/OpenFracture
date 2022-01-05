@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `Prefracture` script allows meshes to be fractured in the editor.
+The `Prefracture` script allows meshes to be fractured in the editor. When a mesh is prefractured, the fragments are added to the scene and the original object is set to an inactive state. Each fragment has a RigidBody attached to it which is frozen. Fragments can be unfrozen based on several trigger conditions (listed below). When the trigger condition is satisfied, the fragment is unfrozen. Optionally, all fragments can be unfrozen if a single fragment's trigger conditions are satisfied. This allows prefractured meshes to be broken apart one piece at a time or shatter all at once.
 
 ## Prerequisites
 
@@ -15,11 +15,11 @@ An object should have the following components added to it. The first three are 
 
 ## Properties
 
-TODO
+![image](https://user-images.githubusercontent.com/3814912/148163874-281eeb3a-3916-4f94-bcc3-bb8f32708c6c.png)
 
 ### Trigger Options
 
-- **Trigger Type**: The method by which the fracture will be triggered
+- **Trigger Type**: The method that triggers the fragments to "wake up" and become active physics objects.
   - **Collision**: Physics-based colliders
   - **Trigger**: Trigger-based colliders
   - **Keyboard**: User presses a key 
@@ -30,17 +30,18 @@ TODO
 
 ### Fracture Options
 - **Fragment Count**: The number of fragments to break the object into. *Note:* If **Detect Floating Fragments** is set to true, the final number of fragments may be higher than **Fragment Count**. This is because floating fragment detection is performed after the fracturing stage is complete.
-- **Asynchronous**: If enable, the mesh will be fractured asynchronously via use of coroutines. The fracture steps are spread out over many frames rather than one to prevent stuttering. If **Fragment Count** is large, the delay between the triggering of the fracture and the fracturing actually occurring can be significant. If performance is an issue, it is recommended to use `*Prefracture` to fracture the mesh in the editor rather than runtime.
+- **Asynchronous**: Has no effect for prefracturing 
 - **Detect Floating Fragments**: If enable, a pass will be made on the resulting fragments after the fracture algorithm has executed to determine if any of the fragments contain unconnected geometry. This can occur when fracturing non-convex meshes. Since the geometry of each fragment must be searched to identify these disconnected sets of vertices/faces, this option will significantly reduce the performance of the fracturing. Once again, if performance is an issue, it is recommended that you use the `Prefracture` script.
 - **Fracture Along X/Y/Z Plane**: Each fracture line can be specified by a vector. For some objects, it is desirable to keep this vector locked to specific planes. For example, assume you have a model of a pane of glass with the width along the X-axis, the height along the Y-axis and the thickness along the Z-axis. The fracture lines should be constrained to the face of the glass (X-Y plane) and not split the glass along its thickness. In this case you would set **Fracture Along X Plane** and **Fracture Along Y Plane** to true and **Fracture Along Z Plane** to false.
 - **Inside Material**: The material to use for the newly fractured faces.
 - **Texture Scale**: Scale factor applied to the UV coordinates for the fractured faces.
 - **Texture Offset**: Constant offset applied to the UV coordinates for the fractured faces.
 
-### Refracture Options
-- **Enabled**: Set to true to enable refracturing of fragments.
-- **Invoke Callbacks**: If enabled, refracturing fragments will also trigger the callbacks. This option can be useful if you only want to trigger an action the first time an object is fractured but not when the fragments are refractured (in this case, you would set this option to false).
-- **Max # of Refractures**: The maximum number of times a fragment can be refractured. **WARNING: Refracturing results in an exponential growth in fragments. It is recommended to keep fragment count low if you enable refracturing.**
-
-## Callback Options
+### Callback Options
 - **OnCompleted()**: This callback is triggered when the fracturing has been completed. Use this to play a sound, turn on a light or any other in-game logic you require.
+
+### Prefracture Options
+- **Unfreeze All**: If one fragment is triggered, unfreeze all fragments.
+- **Save Fragments to Disk**: Saves the fragment meshes to disk. Required if the prefractured mesh will be used in a prefab. Optional if the prefractured mesh will not be used as a prefab and will be embedded in the scene.
+- **Save Location**: Location to save the fragments to relative to the project root directory.
+- **Prefracture**: This button will fracture the mesh and generate the fragments. After the fragments have been generated, the object containing the base mesh is set to inactive but remains in the scene.
