@@ -12,13 +12,9 @@ OpenFracture can be imported using Unity’s built-in Package Manager. Follow th
 
 Alternatively, you may download the code directly and add it to your Unity project.
 
-## How to Use
+## Documentation
 
-There are three separate components included in this package
-
-- `Fracture` - Runtime fracturing of meshes
-- `Prefracture` - Used for pre-fracturing meshes in the editor. The generated fragments can either be saved directly in the scene, or alternatively saved to disk if you would like to create a prefab.
-- `Slice` - Runtime slicing of meshes
+Here is a [link](/Documentation~/GettingStarted.md) to the documentation.
 
 ## Features
 

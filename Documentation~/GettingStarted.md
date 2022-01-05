@@ -1,5 +1,12 @@
-# Preliminaries
+# Getting Started
 
+There are three separate components included in this package. Click on the links below to see documentation for that specific script.
+
+- [Fracture](/Documentation~/Fracture.md) - Break meshes into pieces during runtime.
+- [Prefracture](/Documentation~/Prefracture.md) - Used for pre-fracturing meshes in the editor. The generated fragments can either be saved directly in the scene or saved to disk if you would like to create a prefab.
+- [Slice](/Documentation~/Slice.md) - Runtime slicing of meshes
+
+## Tips
 Before using the scripts, there are a few limitations and considerations to be aware of.
 
 ### 1. If you are importing a custom mesh, you must set "Read/Write Enabled" to true in the Import settings. Otherwise you will get an error.
@@ -14,7 +21,7 @@ Depicted above is the wireframe model of a stool. Notice how the crossbars inter
 
 ![Screenshot 2022-01-03 204203](https://user-images.githubusercontent.com/3814912/148002632-904d4d53-691c-4099-98c5-7e2c8240360a.png)
 
-### 3. Performance Optimization Tips
+### 3. Optimizing Performance
 
 The fracturing process is a computationally intensive process. Simple models (several hundred vertices) can be fractured into dozens of pieces without much of a hitch. The performance of fracturing complex models consisting of several thousands vertices during runtime will likely be quite slow on older, less capable machines.
 
