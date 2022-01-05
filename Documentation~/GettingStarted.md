@@ -21,7 +21,7 @@ Depicted above is the wireframe model of a stool. Notice how the crossbars inter
 
 ![Screenshot 2022-01-03 204203](https://user-images.githubusercontent.com/3814912/148002632-904d4d53-691c-4099-98c5-7e2c8240360a.png)
 
-### 3. Performance Optimization Tips
+### 3. Optimizing Performance
 
 The fracturing process is a computationally intensive process. Simple models (several hundred vertices) can be fractured into dozens of pieces without much of a hitch. The performance of fracturing complex models consisting of several thousands vertices during runtime will likely be quite slow on older, less capable machines.
 
