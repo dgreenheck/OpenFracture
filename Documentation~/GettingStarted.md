@@ -1,5 +1,12 @@
-# Preliminaries
+# Getting Started
 
+There are three separate components included in this package. Click on the links below to see documentation for that specific script.
+
+- [Fracture](/Documentation~/Fracture.md) - Break meshes into pieces during runtime.
+- [Prefracture](/Documentation~/Prefracture.md) - Used for pre-fracturing meshes in the editor. The generated fragments can either be saved directly in the scene or saved to disk if you would like to create a prefab.
+- [Slice](/Documentation~/Slice.md) - Runtime slicing of meshes
+
+## Tips
 Before using the scripts, there are a few limitations and considerations to be aware of.
 
 ### 1. If you are importing a custom mesh, you must set "Read/Write Enabled" to true in the Import settings. Otherwise you will get an error.
