@@ -22,17 +22,17 @@
         {
             "displayName": "FractureDemo",
             "description": "Demo scene for the Fracture script",
-            "path": "Samples~/FractureDemo"
+            "path": "Samples/FractureDemo"
         },
 		{
             "displayName": "PrefractureDemo",
             "description": "Demo scene for the Prefracture script",
-            "path": "Samples~/PrefractureDemo"
+            "path": "Samples/PrefractureDemo"
         },
 		{
             "displayName": "SliceDemo",
             "description": "Demo scene for the Slice script",
-            "path": "Samples~/SliceDemo"
+            "path": "Samples/SliceDemo"
         }
     ]
 }
