@@ -76,6 +76,7 @@ public class Fracture : MonoBehaviour
                 if (collisionForce > triggerOptions.minimumCollisionForce &&
                    (!triggerOptions.filterCollisionsByTag || tagAllowed))
                 {
+                    callbackOptions.CallOnFracture(contact.otherCollider, gameObject);
                     this.ComputeFracture();
                 }
             }
@@ -91,6 +92,7 @@ public class Fracture : MonoBehaviour
 
             if (!triggerOptions.filterCollisionsByTag || tagAllowed)
             {
+                callbackOptions.CallOnFracture(collider, gameObject);
                 this.ComputeFracture();
             }
         }
@@ -102,6 +104,7 @@ public class Fracture : MonoBehaviour
         {
             if (Input.GetKeyDown(triggerOptions.triggerKey))
             {
+                callbackOptions.CallOnFracture(null, gameObject);
                 this.ComputeFracture();
             }
         }
