@@ -43,6 +43,12 @@ public class Fracture : MonoBehaviour
         }
     }
 
+    public void CauseFracture()
+    {
+        callbackOptions.CallOnFracture(null, gameObject, transform.position);
+        this.ComputeFracture();
+    }
+
     void OnValidate()
     {
         if (this.transform.parent != null)
