@@ -28,7 +28,7 @@ public class Fracture : MonoBehaviour
     {
         var mesh = this.GetComponent<MeshFilter>().mesh;
         Debug.Log("Positions");
-        
+
         var positions = mesh.vertices;
         var normals = mesh.normals;
         var uvs = mesh.uv;
@@ -41,6 +41,12 @@ public class Fracture : MonoBehaviour
             Debug.Log($"UV  | U: {uvs[i].x} V: {uvs[i].y}");
             Debug.Log("");
         }
+    }
+
+    public void CauseFracture()
+    {
+        callbackOptions.CallOnFracture(null, gameObject, transform.position);
+        this.ComputeFracture();
     }
 
     void OnValidate()
@@ -76,6 +82,7 @@ public class Fracture : MonoBehaviour
                 if (collisionForce > triggerOptions.minimumCollisionForce &&
                    (!triggerOptions.filterCollisionsByTag || tagAllowed))
                 {
+                    callbackOptions.CallOnFracture(contact.otherCollider, gameObject, contact.point);
                     this.ComputeFracture();
                 }
             }
@@ -91,6 +98,7 @@ public class Fracture : MonoBehaviour
 
             if (!triggerOptions.filterCollisionsByTag || tagAllowed)
             {
+                callbackOptions.CallOnFracture(collider, gameObject, transform.position);
                 this.ComputeFracture();
             }
         }
@@ -102,6 +110,7 @@ public class Fracture : MonoBehaviour
         {
             if (Input.GetKeyDown(triggerOptions.triggerKey))
             {
+                callbackOptions.CallOnFracture(null, gameObject, transform.position);
                 this.ComputeFracture();
             }
         }
@@ -129,7 +138,7 @@ public class Fracture : MonoBehaviour
                 this.fragmentRoot.transform.rotation = this.transform.rotation;
                 this.fragmentRoot.transform.localScale = Vector3.one;
             }
-            
+
             var fragmentTemplate = CreateFragmentTemplate();
 
             if (fractureOptions.asynchronous)
@@ -139,7 +148,7 @@ public class Fracture : MonoBehaviour
                     this.fractureOptions,
                     fragmentTemplate,
                     this.fragmentRoot.transform,
-                    () => 
+                    () =>
                     {
                         // Done with template, destroy it
                         GameObject.Destroy(fragmentTemplate);
@@ -165,7 +174,7 @@ public class Fracture : MonoBehaviour
                                     this.fractureOptions,
                                     fragmentTemplate,
                                     this.fragmentRoot.transform);
-                        
+
                 // Done with template, destroy it
                 GameObject.Destroy(fragmentTemplate);
 
@@ -184,7 +193,7 @@ public class Fracture : MonoBehaviour
             }
         }
     }
-    
+
     /// <summary>
     /// Creates a template object which each fragment will derive from
     /// </summary>
@@ -214,7 +223,7 @@ public class Fracture : MonoBehaviour
         fragmentCollider.convex = true;
         fragmentCollider.sharedMaterial = thisCollider.sharedMaterial;
         fragmentCollider.isTrigger = thisCollider.isTrigger;
-        
+
         // Copy rigid body properties to fragment
         var thisRigidBody = this.GetComponent<Rigidbody>();
         var fragmentRigidBody = obj.AddComponent<Rigidbody>();
@@ -223,7 +232,7 @@ public class Fracture : MonoBehaviour
         fragmentRigidBody.drag = thisRigidBody.drag;
         fragmentRigidBody.angularDrag = thisRigidBody.angularDrag;
         fragmentRigidBody.useGravity = thisRigidBody.useGravity;
-    
+
         // If refracturing is enabled, create a copy of this component and add it to the template fragment object
         if (refractureOptions.enableRefracturing &&
            (this.currentRefractureCount < refractureOptions.maxRefractureCount))
