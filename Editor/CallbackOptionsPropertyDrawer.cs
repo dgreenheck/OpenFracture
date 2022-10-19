@@ -13,6 +13,7 @@ public class CallbackOptionsPropertyDrawer : PropertyDrawer
 
         if (foldout)
         {
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("onFracture"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("onCompleted"));
         }
         

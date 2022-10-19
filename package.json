@@ -1,6 +1,6 @@
 {
   "name": "com.dgreenheck.openfracture",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "displayName": "OpenFracture",
   "description": "Open source tool for slicing/fracturing meshes in Unity during runtime or in the editor.",
   "unity": "2021.1",

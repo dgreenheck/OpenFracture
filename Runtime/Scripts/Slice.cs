@@ -67,6 +67,7 @@ public class Slice : MonoBehaviour
             }
         }
     }
+    
     /// <summary>
     /// Creates a template object which each fragment will derive from
     /// </summary>
