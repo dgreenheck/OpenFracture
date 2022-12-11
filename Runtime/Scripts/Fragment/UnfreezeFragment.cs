@@ -48,7 +48,6 @@ public class UnfreezeFragment : MonoBehaviour
             return;
         }
 
-        bool tagAllowed = triggerOptions.IsTagAllowed(collider.gameObject.tag);
         if (!triggerOptions.filterCollisionsByTag || triggerOptions.IsTagAllowed(collider.gameObject.tag))
         {
             this.Unfreeze();

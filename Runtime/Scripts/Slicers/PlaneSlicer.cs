@@ -53,9 +53,8 @@ public class PlaneSlicer : MonoBehaviour
             foreach(RaycastHit hit in hits)
             {
                 var obj = hit.collider.gameObject;
-                var sliceObj = obj.GetComponent<Slice>();
-
-                if (sliceObj != null)
+                
+                if (obj.TryGetComponent<Slice>(out var sliceObj))
                 {
                     sliceObj.GetComponent<MeshRenderer>()?.material.SetVector("CutPlaneOrigin", Vector3.positiveInfinity);
                     sliceObj.ComputeSlice(this.transform.up, this.transform.position);

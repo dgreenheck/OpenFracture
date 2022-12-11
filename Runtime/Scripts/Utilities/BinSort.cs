@@ -23,7 +23,7 @@ public interface IBinSortable
 /// |_____|_____|_____|
 /// 
 /// </summary>
-public class BinSort
+public static class BinSort
 {
     /// <summary>
     /// Computes the bin number for the set of grid coordinates
