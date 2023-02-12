@@ -8,12 +8,14 @@ public struct MeshVertex
 {
     public Vector3 position;
     public Vector3 normal;
+    public Vector4 tangent;
     public Vector2 uv;
 
     public MeshVertex(Vector3 position)
     {
         this.position = position;
         this.normal = Vector3.zero;
+        this.tangent = Vector4.zero;
         this.uv = Vector2.zero;
     }
 
@@ -21,6 +23,15 @@ public struct MeshVertex
     {
         this.position = position;
         this.normal = normal;
+        this.tangent = Vector4.zero;
+        this.uv = uv;
+    }
+
+    public MeshVertex(Vector3 position, Vector3 normal, Vector4 tangents, Vector2 uv)
+    {
+        this.position = position;
+        this.normal = normal;
+        this.tangent = tangents;
         this.uv = uv;
     }
 

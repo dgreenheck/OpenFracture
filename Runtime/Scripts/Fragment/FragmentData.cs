@@ -101,6 +101,7 @@ public class FragmentData
     {
         var positions = mesh.vertices;
         var normals = mesh.normals;
+        var tangents = mesh.tangents;
         var uv = mesh.uv;
 
         this.Vertices = new List<MeshVertex>(mesh.vertexCount);
@@ -111,7 +112,7 @@ public class FragmentData
         // Add mesh vertices
         for (int i = 0; i < positions.Length; i++)
         {
-            this.Vertices.Add(new MeshVertex(positions[i], normals[i], uv[i]));
+            this.Vertices.Add(new MeshVertex(positions[i], normals[i], tangents[i], uv[i]));
         }
 
         // Only meshes with one submesh are currently supported
@@ -137,9 +138,9 @@ public class FragmentData
     /// <param name="normal">The vertex normal</param>
     /// <param name="uv">The vertex UV coordinates</param>
     /// <returns>Returns the index of the vertex in the cutVertices array</returns>
-    public void AddCutFaceVertex(Vector3 position, Vector3 normal, Vector2 uv)
+    public void AddCutFaceVertex(Vector3 position, Vector3 normal, Vector4 tangent, Vector2 uv)
     {
-        var vertex = new MeshVertex(position, normal, uv);
+        var vertex = new MeshVertex(position, normal, tangent, uv);
 
         // Add the vertex to both the normal mesh vertex data and the cut face vertex data
         // The vertex on the cut face will have different normal/uv coordinates which are
@@ -290,6 +291,7 @@ public class FragmentData
         {
             new VertexAttributeDescriptor(VertexAttribute.Position, VertexAttributeFormat.Float32, 3),
             new VertexAttributeDescriptor(VertexAttribute.Normal, VertexAttributeFormat.Float32, 3),
+            new VertexAttributeDescriptor(VertexAttribute.Tangent, VertexAttributeFormat.Float32, 4),
             new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float32, 2),
         };
 
