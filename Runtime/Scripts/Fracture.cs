@@ -80,7 +80,7 @@ public class Fracture : MonoBehaviour
                 // Object is unfrozen if the colliding object has the correct tag (if tag filtering is enabled)
                 // and the collision force exceeds the minimum collision force.
                 if (collisionForce > triggerOptions.minimumCollisionForce &&
-                   (!triggerOptions.filterCollisionsByTag || tagAllowed))
+                   (triggerOptions.filterCollisionsByTag && tagAllowed))
                 {
                     callbackOptions.CallOnFracture(contact.otherCollider, gameObject, contact.point);
                     this.ComputeFracture();
@@ -96,7 +96,7 @@ public class Fracture : MonoBehaviour
             // Colliding object tag must be in the set of allowed collision tags if filtering by tag is enabled
             bool tagAllowed = triggerOptions.IsTagAllowed(collider.gameObject.tag);
 
-            if (!triggerOptions.filterCollisionsByTag || tagAllowed)
+            if (triggerOptions.filterCollisionsByTag && tagAllowed)
             {
                 callbackOptions.CallOnFracture(collider, gameObject, transform.position);
                 this.ComputeFracture();
