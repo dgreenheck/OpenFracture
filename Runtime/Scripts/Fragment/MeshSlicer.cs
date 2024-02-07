@@ -275,11 +275,16 @@ public static class MeshSlicer
             var uv13 = v1.uv + s13 * (v3.uv - v1.uv);
             var uv23 = v2.uv + s23 * (v3.uv - v2.uv);
 
+            var tang13 = Vector4.Lerp(v2.tangent, v3.tangent, s13).normalized;
+            tang13.w = Mathf.Lerp(v2.tangent.w, v3.tangent.w, s13);
+            var tang23 = Vector4.Lerp(v2.tangent, v3.tangent, s23).normalized;
+            tang23.w = Mathf.Lerp(v2.tangent.w, v3.tangent.w, s23);
+
             // Add vertices/normals/uv for the intersection points to each mesh
-            topSlice.AddCutFaceVertex(v13, norm13, uv13);
-            topSlice.AddCutFaceVertex(v23, norm23, uv23);
-            bottomSlice.AddCutFaceVertex(v13, norm13, uv13);
-            bottomSlice.AddCutFaceVertex(v23, norm23, uv23);
+            topSlice.AddCutFaceVertex(v13, norm13, tang13, uv13);
+            topSlice.AddCutFaceVertex(v23, norm23, tang13, uv23);
+            bottomSlice.AddCutFaceVertex(v13, norm13, tang23, uv13);
+            bottomSlice.AddCutFaceVertex(v23, norm23, tang23, uv23);
 
             // Indices for the intersection vertices (for the original mesh data)
             int index13_A = topSlice.Vertices.Count - 2;
