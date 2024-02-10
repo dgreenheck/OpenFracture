@@ -38,8 +38,7 @@ public class Slice : MonoBehaviour
                 this.fragmentRoot.transform.SetParent(this.transform.parent);
 
                 // Each fragment will handle its own scale
-                this.fragmentRoot.transform.position = this.transform.position;
-                this.fragmentRoot.transform.rotation = this.transform.rotation;
+                this.fragmentRoot.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
                 this.fragmentRoot.transform.localScale = Vector3.one;
             }
             

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+### Features
+- Improved CPU performance
+
 ## 1.0.2
 ### Features
 - Added `onFracture` to editor
