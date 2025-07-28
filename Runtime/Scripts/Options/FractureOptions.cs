@@ -28,13 +28,15 @@ public class FractureOptions
 
     [Tooltip("The material to use for the inside faces")]
     public Material insideMaterial;
-    
+
     [Tooltip("Scale factor to apply to texture coordinates")]
     public Vector2 textureScale;
 
     [Tooltip("Offset to apply to texture coordinates")]
     public Vector2 textureOffset;
 
+    [Tooltip("Inherits the layer of the original gameobject")]
+    public bool shouldInheritLayer;
     public FractureOptions()
     {
         this.fragmentCount = 10;
@@ -46,5 +48,6 @@ public class FractureOptions
         this.insideMaterial = null;
         this.textureScale = Vector2.one;
         this.textureOffset = Vector2.zero;
+        this.shouldInheritLayer = true;
     }
 }
